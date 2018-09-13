@@ -42,7 +42,7 @@ public class UserController {
                 }else{
                     map.put("status", 1);
                     map.put("message", "success");
-                    request.getSession().setAttribute("username", username);//设置session
+                    request.getSession().setAttribute("studentid", user.getStudentId());//设置session
                 }
             }else {
                 map.put("status",0);
@@ -57,7 +57,7 @@ public class UserController {
 
     @PostMapping("/registe")
     @ApiOperation(value = "注册")
-    public User post(String studentId, String userpassword,String username) {
+    public User post(String studentId, String userpassword,String username,HttpServletRequest request) {
         User user = userDao.findUserByStudentid(studentId);
         Map<String, Object> map = new HashMap<>();
         if(user !=null){
@@ -67,7 +67,16 @@ public class UserController {
             map.put("status",1);
             map.put("message","success");
             userDao.saveUser(new User(studentId,userpassword,username));
+            request.getSession().setAttribute("studentid",user.getStudentId());
         }
         return new User(studentId,userpassword,username);
+    }
+
+    @PostMapping("registe/{id}")
+    @ApiOperation(value = "修改用户验证状态")
+    public void put(@PathVariable String id ) {
+        User user = userDao.findUserByStudentid(id);
+        user.setVerification_status(1);
+        userDao.saveUser(user);
     }
 }
