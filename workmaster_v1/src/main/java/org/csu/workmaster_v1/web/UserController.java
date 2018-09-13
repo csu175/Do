@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,13 +31,19 @@ public class UserController {
             @ApiImplicitParam(name = "username", value = "用户名", dataType = ApiDataType.STRING, paramType = ApiParamType.QUERY),
             @ApiImplicitParam(name = "userpassword", value = "密码", dataType = ApiDataType.STRING, paramType = ApiParamType.QUERY),
     })
-    public Map<String,Object> login(String username, String userpassword) {
+    public Map<String,Object> login(String username, String userpassword ,HttpServletRequest request) {
         User user = userDao.findUserByusername(username);
         Map<String, Object> map = new HashMap<>();
         if(user!=null){
             if(user.getUserpassword().equals(userpassword)) {
-                map.put("status", 1);
-                map.put("message", "success");
+                if(user.getVerification_status()==0){
+                    map.put("status",0);
+                    map.put("message", "please verify the mail");
+                }else{
+                    map.put("status", 1);
+                    map.put("message", "success");
+                    request.getSession().setAttribute("username", username);//设置session
+                }
             }else {
                 map.put("status",0);
                 map.put("message", "password invalid");
@@ -51,6 +58,16 @@ public class UserController {
     @PostMapping("/registe")
     @ApiOperation(value = "注册")
     public User post(String studentId, String userpassword,String username) {
+        User user = userDao.findUserByStudentid(studentId);
+        Map<String, Object> map = new HashMap<>();
+        if(user !=null){
+            map.put("message","user has exist");
+            map.put("status",0);
+        }else{
+            map.put("status",1);
+            map.put("message","success");
+            userDao.saveUser(new User(studentId,userpassword,username));
+        }
         return new User(studentId,userpassword,username);
     }
 }

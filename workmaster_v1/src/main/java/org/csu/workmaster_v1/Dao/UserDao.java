@@ -13,5 +13,5 @@ public interface UserDao {
     public void updateAvatar(long userId,long Avator);
     public void updateGroup(long userId,long GroupId);
     public User findUserByusername(String  username);
-
+    public User findUserByStudentid(String  studentid);
 }
