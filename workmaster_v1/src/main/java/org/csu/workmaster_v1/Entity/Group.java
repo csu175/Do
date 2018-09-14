@@ -2,6 +2,7 @@ package org.csu.workmaster_v1.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Group {
     public long groupid;
@@ -10,8 +11,8 @@ public class Group {
     public List<Long> userlist =new ArrayList<Long>();
     public long groupavatar;
 
-    public Group(long groupid, String groupname, String groupgescription, long groupavatar) {
-        this.groupid = groupid;
+    public Group(String groupname, String groupgescription, long groupavatar) {
+        this.groupid = new Random().nextLong();
         this.groupname = groupname;
         this.groupgescription = groupgescription;
         this.groupavatar = groupavatar;
