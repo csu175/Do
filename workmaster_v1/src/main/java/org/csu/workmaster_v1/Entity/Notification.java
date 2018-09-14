@@ -1,22 +1,24 @@
 package org.csu.workmaster_v1.Entity;
 
-public class Notificaion {
+import java.util.Random;
+
+public class Notification {
     public long noficationid;
     public long senderId;
     public long receiver;
     public String notifictioncontent;
     public long time;
     public long groupid;
-    public int  notificationstatus;
+    public int  notificationstatus;//状态 0  1  2
 
-    public Notificaion(long noficationid, long senderId, long receiver, String notifictioncontent, long time, long groupid, int notificationstatus) {
-        this.noficationid = noficationid;
+    public Notification(long senderId, long receiver, String notifictioncontent, long groupid) {
+        this.noficationid = new Random().nextLong();
         this.senderId = senderId;
         this.receiver = receiver;
         this.notifictioncontent = notifictioncontent;
-        this.time = time;
+        this.time = System.currentTimeMillis();
         this.groupid = groupid;
-        this.notificationstatus = notificationstatus;
+        this.notificationstatus = 0;
     }
 
     public long getNoficationid() {
@@ -74,4 +76,5 @@ public class Notificaion {
     public void setNotificationstatus(int notificationstatus) {
         this.notificationstatus = notificationstatus;
     }
+
 }

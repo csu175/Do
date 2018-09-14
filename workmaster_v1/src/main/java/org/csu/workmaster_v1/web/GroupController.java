@@ -2,6 +2,9 @@ package org.csu.workmaster_v1.web;
 
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.csu.workmaster_v1.Dao.FileDao;
+import org.csu.workmaster_v1.Dao.GroupDao;
 import org.csu.workmaster_v1.Dao.UserDao;
 import org.csu.workmaster_v1.Entity.File;
 import org.csu.workmaster_v1.Entity.Group;
@@ -41,12 +44,13 @@ public class GroupController {
         group.getUserlist().add(user.getId());
         return map;
     }
+
     @GetMapping("/adduser")
     public Map<String, Object> adduser(String studentId, String groupName){
         Map<String ,Object> map = new HashMap<>();
         try {
             User user = userDao.findUserByStudentid(studentId);
-            Group group = groupDao.finGroupByGroupName(groupName);
+            Group group = groupDao.findGroupByGroupName(groupName);
             if( user != null && group != null ) {
                 user.getGroupList().add(group.getGroupid());
                 group.getUserlist().add(user.getId());
@@ -58,6 +62,54 @@ public class GroupController {
                 map.put("status",0);
                 map.put("message","failed");
             }
+        }catch (Exception ex){
+            map.put("message","there is an Exception in the server");
+        }
+        return  map;
+    }
+
+    @GetMapping("/deleteuser")
+    public Map<String, Object> deleteuser(String studentId, String groupName){
+        Map<String ,Object> map = new HashMap<>();
+        try {
+            User user = userDao.findUserByStudentid(studentId);
+            Group group = groupDao.findGroupByGroupName(groupName);
+            if( user != null && group != null ) {
+                user.getGroupList().remove(group.getGroupid());
+                group.getUserlist().remove(user.getId());
+                map.put("status",1);
+                map.put("message","success");
+                userDao.updateUser(user);
+                groupDao.updateGroup(group);
+            }else{
+                map.put("status",0);
+                map.put("message","failed");
+            }
+        }catch (Exception ex){
+            map.put("message","there is an Exception in the server");
+        }
+        return  map;
+    }
+
+    @GetMapping("/addusers")
+    @ApiOperation(value = "邀请一堆人加入，返回该区间人的信息")
+    public Map<String, Object> adduser(String studentId, String groupName, int number){
+        Map<String ,Object> map = new HashMap<>();
+        try {
+            Group group = groupDao.findGroupByGroupName(groupName);
+            int numStudent = Integer.valueOf(studentId);
+            for ( int i = 0;i < number;i++){
+                User user = userDao.findUserByStudentid(String.valueOf(numStudent+i));
+                if( user != null && group != null ) {
+                    user.getGroupList().add(group.getGroupid());
+                    group.getUserlist().add(user.getId());
+                    userDao.updateUser(user);
+                    groupDao.updateGroup(group);
+                }
+            }
+            map.put("status",1);
+            map.put("message","success");
+            map.put("users",group.getUserlist());
         }catch (Exception ex){
             map.put("message","there is an Exception in the server");
         }

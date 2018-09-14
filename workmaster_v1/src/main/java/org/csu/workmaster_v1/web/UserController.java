@@ -6,9 +6,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.csu.workmaster_v1.Dao.MessageDao;
+import org.csu.workmaster_v1.Dao.NotificationDao;
+import org.csu.workmaster_v1.Dao.TaskDao;
 import org.csu.workmaster_v1.Dao.UserDao;
 import org.csu.workmaster_v1.Entity.Message;
-import org.csu.workmaster_v1.Entity.Notificaion;
+import org.csu.workmaster_v1.Entity.Notification;
 import org.csu.workmaster_v1.Entity.Task;
 import org.csu.workmaster_v1.Entity.User;
 import org.slf4j.Logger;
@@ -17,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.PastOrPresent;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +33,12 @@ public class UserController {
 
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private MessageDao messageDao;
+    @Autowired
+    private TaskDao taskDao;
+    @Autowired
+    private NotificationDao notificationDao;
     @Autowired
     private org.csu.workmaster_v1.service.MailService mailService;
 
@@ -97,9 +105,9 @@ public class UserController {
     public Map<String, Object> getUser(String StudentId){
         Map<String, Object> map = new HashMap<>();
         User user = userDao.findUserByStudentid(StudentId);
-        List<Message> messagelist = MessageDao.findMessageByStudentid(StudentId);
-        List<Task> tasklist = TaskDao.findMessageByStudentid(StudentId);
-        List<Notificaion> notificationlist = NotificationDao.findMessageByStudentid(StudentId);
+        List<Message> messagelist = messageDao.findMessageByStudentid(StudentId);
+        List<Task> tasklist = taskDao.findMessageByStudentid(StudentId);
+        List<Notification> notificationlist = notificationDao.findMessageByStudentid(StudentId);
 
         if(user !=null){
             map.put("user",user);
@@ -133,8 +141,13 @@ public class UserController {
                 userDao.updateUser(user);
                 map.put("status",1);
                 map.put("message","change the avatar successfully");
+            }else{
+                map.put("status",0);
+                map.put("message","user is null or Avator is null");
+            }
         }catch(Exception ex){
-            ex.print
+                map.put("status",0);
+                map.put("message","there is an Exception");
         }
         return map;
     }
