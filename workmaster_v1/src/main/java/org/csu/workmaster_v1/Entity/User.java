@@ -20,7 +20,7 @@ public class User implements Serializable {
     public User(){}
 
     public User(String studentid, String userpassword, String username) {
-        studentid = studentid;
+        this.studentid = studentid;
         this.userpassword = userpassword;
         this.username = username;
         id = new Random().nextInt(10000000);
@@ -36,7 +36,7 @@ public class User implements Serializable {
         this.id = id;
         studentid = studentId;
         this.userpassword = userpassword;
-        avatar = avatar;
+        this.avatar = avatar;
         this.username = username;
     }
 

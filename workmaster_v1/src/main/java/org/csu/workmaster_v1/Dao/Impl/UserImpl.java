@@ -76,4 +76,11 @@ public class UserImpl implements UserDao {
         User user =  mongoTemplate.findOne(query , User.class);
         return user;
     }
+
+    @Override
+    public User findUserByStudentid(String studentid) {
+        Query query=new Query(Criteria.where("Studentid").is(studentid));
+        User user =  mongoTemplate.findOne(query , User.class);
+        return user;
+    }
 }

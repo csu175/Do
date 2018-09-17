@@ -14,7 +14,7 @@ import java.util.Map;
 
 @RestController
 public class LoginController {
-    @Autowired
+   /* @Autowired
     private UserDao userDao;
 
     @RequestMapping(value = "/registe")
@@ -28,12 +28,12 @@ public class LoginController {
         return map;
     }
 
-    /**
+    *//**
      * @Cacheable 支持如下几个参数：
      * value：缓存的名称。
      * key：缓存的 key，可以为空
      *  condition：触发条件，只有满足条件的情况才会加入缓存，默认为空 condition="#nickname.length() >= 6"
-     */
+     *//*
     @GetMapping("/hello")
     @Cacheable(value="helloCache")
     public String hello(String name) {
@@ -57,6 +57,6 @@ public class LoginController {
         map.put("message", request.getSession().getAttribute("message"));
         return map;
     }
-
+*/
 }
 

@@ -2,6 +2,7 @@ package org.csu.workmaster_v1.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Task {
     public long taskid;
@@ -9,20 +10,22 @@ public class Task {
     public String taskname;
     public String taskcontent;
     public long time;
+    public long deadline;
     public long taskpublisher;
     public List userdone = new ArrayList<Long>();
     public String fileformat;
-    public List fileList = new ArrayList<Long>();
+    public List filelist = new ArrayList<Long>();
+    public int taskstatus;
 
-    public Task(long taskid, long groupid, String taskname, String taskcontent, long time, long taskpublisher, List userdone, String fileformat) {
-        this.taskid = taskid;
+    public Task(long groupid, String taskname, String taskcontent, long taskpublisher, String fileformat,long deadline) {
+        this.taskid = new Random().nextLong();
         this.groupid = groupid;
         this.taskname = taskname;
         this.taskcontent = taskcontent;
-        this.time = time;
+        this.time = System.currentTimeMillis();
         this.taskpublisher = taskpublisher;
-        this.userdone = userdone;
         this.fileformat = fileformat;
+        this.taskstatus = 0;
     }
 
     public long getTaskid() {
@@ -89,12 +92,16 @@ public class Task {
         this.fileformat = fileformat;
     }
 
-    public List getFileList() {
-        return fileList;
-    }
+    public long getDeadline() { return deadline;}
 
-    public void setFileList(List fileList) {
-        this.fileList = fileList;
-    }
+    public void setDeadline(long deadline) {  this.deadline = deadline;}
+
+    public List getFilelist() { return filelist;}
+
+    public void setFilelist(List filelist) { this.filelist = filelist;}
+
+    public int getTaskstatus() { return taskstatus;}
+
+    public void setTaskstatus(int taskstatus) { this.taskstatus = taskstatus; }
 }
 

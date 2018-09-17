@@ -2,23 +2,28 @@ package org.csu.workmaster_v1.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Message {
     public long messageid;
     public long groupid;
     public String messagename;
+    public String messageabstract;
     public String messagecontent;
     public long time;
     public long messagepublisher;
     public List<Long> userreaded;
+    public int messagestatus;
 
-    public Message(long messageid, long groupid, String messagename, String messagecontent, long time, long messagepublisher) {
-        this.messageid = messageid;
+    public Message(long groupid, String messagename,String messageabstract, String messagecontent, long messagepublisher) {
+        this.messageid = new Random().nextLong();
         this.groupid = groupid;
         this.messagename = messagename;
+        this.messageabstract = messageabstract;
         this.messagecontent = messagecontent;
-        this.time = time;
+        this.time = System.currentTimeMillis();
         this.messagepublisher = messagepublisher;
+        this.messagestatus = 0;
     }
 
     public long getMessageid() {
@@ -76,4 +81,12 @@ public class Message {
     public void setUserreaded(List<Long> userreaded) {
         this.userreaded = userreaded;
     }
+
+    public String getMessageabstract() {  return messageabstract;}
+
+    public void setMessageabstract(String messageabstract) { this.messageabstract = messageabstract; }
+
+    public int getMessagestatus() { return messagestatus; }
+
+    public void setMessagestatus(int messagestatus) { this.messagestatus = messagestatus; }
 }
